@@ -9,6 +9,22 @@ const fmtUSD = (n) =>
 
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
+// ВКЛАДІТЬ ЦЕ НА ПОЧАТОК script.js (після утиліт), АБО ЗАМІНІТЬ БЛОК ІНІЦІАЛІЗАЦІЇ
+function initApp() {
+  try { initTheme(); } catch (e) { console.error('initTheme error:', e); }
+  try { initNav(); } catch (e) { console.error('initNav error:', e); }
+  try { initFilters(); } catch (e) { console.error('initFilters error:', e); }
+  try { initModal(); } catch (e) { console.error('initModal error:', e); }
+  try { initContactForm(); } catch (e) { console.error('initContactForm error:', e); }
+  try { initSmoothAnchors(); } catch (e) { console.error('initSmoothAnchors error:', e); }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
+
 // =========================
 // СТАН ДОДАТКА / ДАНІ
 // =========================

@@ -1,72 +1,105 @@
 const cars = [
   {
-    title: "Mercedes-AMG GT 63 S",
-    img: "https://upload.wikimedia.org/wikipedia/commons/3/3b/2019_Mercedes-AMG_GT_4-Door_Coupe_63_S_4MATIC%2B_4.0.jpg",
-    desc: "V8 Biturbo 630 к.с. — спорт та розкіш"
+    title: "AMG GT 63",
+    type: "sport",
+    desc: "630 HP V8 Biturbo",
+    specs: ["0-100: 3.2s", "630 HP", "AMG Performance"],
+    images: [
+      "https://upload.wikimedia.org/wikipedia/commons/3/3b/2019_Mercedes-AMG_GT_4-Door.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/5/5c/Mercedes_AMG_GT_front.jpg"
+    ]
   },
   {
-    title: "Mercedes S-Class",
-    img: "https://upload.wikimedia.org/wikipedia/commons/3/3e/Mercedes-Benz_W223_IMG_4011.jpg",
-    desc: "Флагман комфорту та технологій"
+    title: "S-Class",
+    type: "sedan",
+    desc: "Luxury flagship sedan",
+    specs: ["Comfort+", "Autopilot", "Massage seats"],
+    images: [
+      "https://upload.wikimedia.org/wikipedia/commons/3/3e/Mercedes-Benz_W223.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/7/7a/Mercedes_S_class_interior.jpg"
+    ]
   },
   {
-    title: "Mercedes G-Class",
-    img: "https://upload.wikimedia.org/wikipedia/commons/3/3f/2018_Mercedes-Benz_G_500_AMG_Line_4MATIC_4.0_Front.jpg",
-    desc: "Легендарний позашляховик"
+    title: "G-Class",
+    type: "suv",
+    desc: "Legendary off-road SUV",
+    specs: ["4x4", "Luxury", "Iconic design"],
+    images: [
+      "https://upload.wikimedia.org/wikipedia/commons/3/3f/Mercedes_G_class.jpg"
+    ]
   },
   {
-    title: "Mercedes EQS",
-    img: "https://upload.wikimedia.org/wikipedia/commons/3/3d/Mercedes-Benz_V297_1X7A6436.jpg",
-    desc: "Електричний флагман Mercedes"
-  },
-  {
-    title: "Mercedes GLE Coupe",
-    img: "https://upload.wikimedia.org/wikipedia/commons/6/6b/Mercedes-Benz_C167_IMG_4247.jpg",
-    desc: "Спортивний SUV купе"
-  },
-  {
-    title: "Mercedes C-Class",
-    img: "https://upload.wikimedia.org/wikipedia/commons/1/15/Mercedes-Benz_W206_IMG_5267.jpg",
-    desc: "Бізнес седан нового покоління"
-  },
-  {
-    title: "Mercedes E-Class",
-    img: "https://upload.wikimedia.org/wikipedia/commons/3/3a/Mercedes-Benz_W214_IMG_0075.jpg",
-    desc: "Баланс комфорту та потужності"
-  },
-  {
-    title: "Mercedes Maybach S-Class",
-    img: "https://upload.wikimedia.org/wikipedia/commons/5/5c/Mercedes-Maybach_S_580_4MATIC_IMG_5120.jpg",
-    desc: "Максимальна розкіш"
+    title: "EQS",
+    type: "electric",
+    desc: "Electric flagship",
+    specs: ["770km range", "EV", "Hyperscreen"],
+    images: [
+      "https://upload.wikimedia.org/wikipedia/commons/3/3d/Mercedes_EQS.jpg"
+    ]
   }
 ];
 
-const grid = document.getElementById("carsGrid");
+const grid = document.getElementById("grid");
+
 const modal = document.getElementById("modal");
-const modalImg = document.getElementById("modalImg");
-const modalTitle = document.getElementById("modalTitle");
-const modalDesc = document.getElementById("modalDesc");
-const closeBtn = document.getElementById("closeBtn");
+const mainImg = document.getElementById("mainImg");
+const thumbs = document.getElementById("thumbs");
+const title = document.getElementById("title");
+const desc = document.getElementById("desc");
+const specs = document.getElementById("specs");
 
-cars.forEach(car => {
-  const div = document.createElement("div");
-  div.className = "card";
+function render(list) {
+  grid.innerHTML = "";
 
-  div.innerHTML = `
-    <img src="${car.img}">
-    <h3>${car.title}</h3>
-  `;
+  list.forEach(car => {
+    const div = document.createElement("div");
+    div.className = "card";
 
-  div.onclick = () => {
-    modal.style.display = "flex";
-    modalImg.src = car.img;
-    modalTitle.textContent = car.title;
-    modalDesc.textContent = car.desc;
-  };
+    div.innerHTML = `
+      <img src="${car.images[0]}">
+      <div class="card-body">
+        <h3>${car.title}</h3>
+        <p>${car.type}</p>
+      </div>
+    `;
 
-  grid.appendChild(div);
-});
+    div.onclick = () => open(car);
 
-closeBtn.onclick = () => {
-  modal.style.display = "none";
+    grid.appendChild(div);
+  });
+}
+
+function open(car) {
+  modal.style.display = "flex";
+
+  mainImg.src = car.images[0];
+  title.textContent = car.title;
+  desc.textContent = car.desc;
+
+  specs.innerHTML = car.specs.map(s => `<li>${s}</li>`).join("");
+
+  thumbs.innerHTML = "";
+  car.images.forEach(img => {
+    const t = document.createElement("img");
+    t.src = img;
+    t.onclick = () => mainImg.src = img;
+    thumbs.appendChild(t);
+  });
+}
+
+document.getElementById("close").onclick = () => modal.style.display = "none";
+
+window.onclick = e => {
+  if (e.target === modal) modal.style.display = "none";
 };
+
+document.getElementById("search").oninput = e => {
+  render(cars.filter(c => c.title.toLowerCase().includes(e.target.value.toLowerCase())));
+};
+
+document.getElementById("filter").onchange = e => {
+  if (!e.target.value) return render(cars);
+  render(cars.filter(c => c.type === e.target.value));
+};
+
+render(cars);

@@ -1,35 +1,55 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mercedes Luxury Showroom</title>
-
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<header class="header">
-  <h1>Mercedes Luxury</h1>
+<header class="topbar">
+  <div class="logo">Mercedes Luxury</div>
+
+  <input id="search" placeholder="Пошук авто...">
+
+  <select id="filter">
+    <option value="">Всі</option>
+    <option value="sedan">Sedan</option>
+    <option value="suv">SUV</option>
+    <option value="sport">Sport</option>
+    <option value="electric">Electric</option>
+  </select>
 </header>
 
 <section class="hero">
-  <h2>The Best or Nothing</h2>
-  <p>Оберіть свій Mercedes</p>
+  <h1>The Best or Nothing</h1>
+  <p>Преміальний Mercedes Showroom</p>
 </section>
 
-<section class="cars">
-  <div id="carsGrid" class="grid"></div>
-</section>
+<section id="grid" class="grid"></section>
 
-<!-- МОДАЛЬНЕ ВІКНО -->
+<!-- MODAL -->
 <div id="modal" class="modal">
   <div class="modal-box">
-    <span id="closeBtn">✕</span>
-    <img id="modalImg">
-    <h2 id="modalTitle"></h2>
-    <p id="modalDesc"></p>
+
+    <span id="close">✕</span>
+
+    <div class="modal-left">
+      <img id="mainImg">
+      <div id="thumbs" class="thumbs"></div>
+    </div>
+
+    <div class="modal-right">
+      <h2 id="title"></h2>
+      <p id="desc"></p>
+
+      <ul id="specs"></ul>
+
+      <button class="btn">Запис на тест-драйв</button>
+    </div>
+
   </div>
 </div>
 

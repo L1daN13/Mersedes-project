@@ -5,236 +5,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Mercedes Luxury — Demo</title>
 
-  <link rel="preconnect" href="[fonts.googleapis.com](https://fonts.googleapis.com)">
-  <link href="[fonts.googleapis.com](https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500;600&display=swap)" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
   <!-- HEADER -->
   <header class="site-header">
-    <a class="brand" href="#home" data-nav aria-label="Mercedes Luxury — Головна">
+    <a class="brand" href="#home" data-nav>
       <div class="brand-star">★</div>
       <span class="brand-text">Mercedes Luxury</span>
     </a>
-    <nav class="main-nav" aria-label="Навігація">
-      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-list" aria-label="Меню">☰</button>
-      <ul id="nav-list">
+
+    <nav class="main-nav">
+      <ul>
         <li><a href="#home" data-nav>Головна</a></li>
         <li><a href="#cars" data-nav>Автомобілі</a></li>
         <li><a href="#about" data-nav>Про нас</a></li>
         <li><a href="#contacts" data-nav>Контакти</a></li>
       </ul>
     </nav>
-    <div class="header-actions">
-      <a class="btn primary" href="#contacts" data-nav>Записатись</a>
-    </div>
   </header>
 
-  <main>
-    <!-- HERO -->
-    <section id="home" class="page active">
-      <div class="hero-bg"></div>
-      <div class="hero-grid-lines"></div>
-      <div class="hero-car-silhouette"></div>
+  <!-- HERO -->
+  <section id="home">
+    <h1>Mercedes Luxury</h1>
+    <p>Преміальні автомобілі Mercedes-Benz</p>
+  </section>
 
-      <div class="hero-content">
-        <div class="hero-eyebrow">
-          <span class="hero-eyebrow-dot"></span>
-          Преміальний дилер · Київ, Україна
-        </div>
-        <h1>The Best<br>or <em>Nothing.</em></h1>
-        <p class="hero-subtitle">Преміальні автомобілі Mercedes‑Benz нового покоління — тест‑драйв, трейд‑ін, сервіс.</p>
-        <div class="hero-cta">
-          <a href="#cars" class="btn primary" data-nav>Каталог авто</a>
-          <a href="#about" class="btn secondary" data-nav>Дізнатись більше</a>
-        </div>
-        <div class="hero-stats">
-          <div class="stat">
-            <div class="stat-number stat-gold">24+</div>
-            <div class="stat-label">Моделі в наявності</div>
-          </div>
-          <div class="stat">
-            <div class="stat-number">12</div>
-            <div class="stat-label">Років досвіду</div>
-          </div>
-          <div class="stat">
-            <div class="stat-number">1 800</div>
-            <div class="stat-label">Задоволених клієнтів</div>
-          </div>
-        </div>
-      </div>
-    </section>
+  <!-- ABOUT IMAGE FIX -->
+  <section id="about">
+    <img src="https://picsum.photos/seed/showroom1/800/600" alt="Шоурум" />
+    <img src="https://picsum.photos/seed/mblogo/400/400" alt="Лого" />
+  </section>
 
-    <!-- CARS -->
-    <section id="cars" class="page section-wrap">
-      <div class="container">
-        <div class="section-header">
-          <div class="section-tag">Колекція</div>
-          <h2 class="section-title">Наші <em>автомобілі</em></h2>
-        </div>
-
-        <div class="filters-bar">
-          <div class="filter-group">
-            <label for="search">Пошук моделі</label>
-            <input type="search" id="search" placeholder="AMG, S‑Class…" />
-          </div>
-          <div class="filter-group">
-            <label for="price">Ціна до (USD)</label>
-            <input type="number" id="price" placeholder="250000" />
-          </div>
-          <div class="filter-group">
-            <label for="type">Категорія</label>
-            <select id="type">
-              <option value="">Всі</option>
-              <option value="sedan">Седан</option>
-              <option value="suv">Позашляховик</option>
-              <option value="sport">Спорткар</option>
-              <option value="electric">Електро</option>
-            </select>
-          </div>
-          <div class="filter-actions">
-            <button id="applyFilters" class="btn primary" type="button">Застосувати</button>
-            <button id="resetFilters" class="btn ghost" type="button">Скинути</button>
-          </div>
-        </div>
-
-        <div id="carsGrid" class="grid"></div>
-      </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="about" class="page section-wrap">
-      <div class="container">
-        <div class="about-grid">
-          <div class="about-image-wrap">
-            <div class="about-gold-bar"></div>
-            <img class="about-image-main" src="[picsum.photos](https://picsum.photos/seed/showroom1/800/600)" alt="Шоурум" />
-            <img class="about-image-accent" src="[picsum.photos](https://picsum.photos/seed/mblogo/400/400)" alt="Деталь" />
-          </div>
-          <div class="about-text">
-            <div class="section-header">
-              <div class="section-tag">Наша місія</div>
-              <h2 class="section-title">Про <em>нас</em></h2>
-            </div>
-            <p>Ми — офіційний преміальний дилер Mercedes‑Benz з 2012 року. Повний спектр послуг: добір авто, фінансування, постпродажний сервіс.</p>
-            <p>Кожен клієнт отримує персонального менеджера, прозорий підбір і гарантію якості від виробника.</p>
-            <div class="about-features">
-              <div class="about-feature">
-                <div class="about-feature-icon">🏎</div>
-                <div class="about-feature-title">Тест‑драйв</div>
-                <div class="about-feature-text">Безкоштовний тест‑драйв будь‑якої моделі у зручний час.</div>
-              </div>
-              <div class="about-feature">
-                <div class="about-feature-icon">🔄</div>
-                <div class="about-feature-title">Трейд‑ін</div>
-                <div class="about-feature-text">Оцінимо ваше авто та зарахуємо в рахунок нового.</div>
-              </div>
-              <div class="about-feature">
-                <div class="about-feature-icon">🛡</div>
-                <div class="about-feature-title">Офіційний сервіс</div>
-                <div class="about-feature-text">Сертифіковані механіки та оригінальні запчастини.</div>
-              </div>
-              <div class="about-feature">
-                <div class="about-feature-icon">💼</div>
-                <div class="about-feature-title">Фінансування</div>
-                <div class="about-feature-text">Партнерство з банками. Кредит або лізинг на вигідних умовах.</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTACTS -->
-    <section id="contacts" class="page section-wrap">
-      <div class="container">
-        <div class="contact-grid">
-          <div class="contact-info">
-            <div class="section-tag">Зв’язок</div>
-            <h3>Запишіться на<br><em style="font-style:italic;color:var(--gold)">консультацію</em></h3>
-            <p>Залиште заявку — наш менеджер зв’яжеться з вами до 30 хвилин у робочий час.</p>
-            <div class="contact-details">
-              <div class="contact-detail">
-                <div class="contact-detail-icon">📍</div>
-                <div>
-                  <div class="contact-detail-label">Адреса</div>
-                  <div class="contact-detail-text">вул. Хрещатик 1, Київ</div>
-                </div>
-              </div>
-              <div class="contact-detail">
-                <div class="contact-detail-icon">📞</div>
-                <div>
-                  <div class="contact-detail-label">Телефон</div>
-                  <div class="contact-detail-text">+38 (044) 000‑00‑00</div>
-                </div>
-              </div>
-              <div class="contact-detail">
-                <div class="contact-detail-icon">🕐</div>
-                <div>
-                  <div class="contact-detail-label">Години роботи</div>
-                  <div class="contact-detail-text">Пн–Пт 9:00–20:00 · Сб–Нд 10:00–18:00</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="contact-form">
-            <form id="contactForm" novalidate>
-              <div class="form-row">
-                <label for="name">Ваше ім’я</label>
-                <input id="name" name="name" type="text" placeholder="Іван Петренко" required />
-                <span class="error" data-for="name"></span>
-              </div>
-              <div class="form-row">
-                <label for="phone">Телефон</label>
-                <input id="phone" name="phone" type="tel" placeholder="+38 (0__) ___‑__‑__" required />
-                <span class="error" data-for="phone"></span>
-              </div>
-              <div class="form-row">
-                <label for="model">Модель</label>
-                <select id="model" name="model"><option value="">Не обрано</option></select>
-              </div>
-              <div class="form-row">
-                <button class="btn primary" type="submit" style="width:100%;padding:14px">Надіслати заявку</button>
-                <div id="formStatus" role="status" aria-live="polite"></div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- MODAL -->
-  <div id="modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="modal-backdrop" data-close></div>
-    <div class="modal-box" role="document">
-      <button class="modal-close" aria-label="Закрити" data-close>✕</button>
-      <div class="modal-media">
-        <img id="modalImage" alt="Фото автомобіля" />
-        <div class="thumbs" id="modalThumbs"></div>
-      </div>
-      <div class="modal-content">
-        <div class="modal-tag">Mercedes‑Benz</div>
-        <h3 id="modalTitle"></h3>
-        <p class="modal-price" id="modalPrice"></p>
-        <p class="modal-desc" id="modalDesc"></p>
-        <ul class="modal-specs" id="modalSpecs"></ul>
-        <div class="modal-actions">
-          <button class="btn primary" id="buyBtn">Купити</button>
-          <button class="btn secondary" id="testDriveBtn">Тест‑драйв</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <footer>
-    <div class="container">
-      <div class="footer-logo">Mercedes Luxury</div>
-      <p>© 2025 Mercedes Luxury — Офіційний преміальний дилер · Київ, Україна</p>
-    </div>
-  </footer>
+  <!-- CONTACT -->
+  <section id="contacts">
+    <h2>Контакти</h2>
+    <form>
+      <input placeholder="Ім'я" />
+      <input placeholder="Телефон" />
+      <button type="submit">Відправити</button>
+    </form>
+  </section>
 
   <script src="script.js"></script>
 </body>

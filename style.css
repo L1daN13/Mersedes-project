@@ -1,133 +1,37 @@
 body {
   margin: 0;
   font-family: Arial;
-  background: radial-gradient(circle at top, #1a1a1a, #000);
+  background: #0b0b0b;
   color: white;
 }
 
-/* TOPBAR */
-.topbar {
+header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   padding: 15px;
-  background: rgba(0,0,0,0.8);
-  backdrop-filter: blur(10px);
-  position: sticky;
-  top: 0;
+  background: black;
 }
 
-.topbar input, .topbar select {
-  padding: 8px;
-  border-radius: 8px;
-  border: none;
+nav a {
+  color: white;
+  margin: 10px;
+  text-decoration: none;
 }
 
-/* HERO */
-.hero {
-  text-align: center;
-  padding: 60px;
-}
-
-.hero h1 {
-  font-size: 40px;
-  letter-spacing: 2px;
-}
-
-/* GRID */
-.grid {
+#grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
   padding: 20px;
 }
 
 .card {
-  background: rgba(255,255,255,0.05);
-  border-radius: 16px;
-  overflow: hidden;
+  background: #1a1a1a;
+  padding: 10px;
   cursor: pointer;
-  transition: 0.4s;
-  border: 1px solid rgba(255,255,255,0.1);
-}
-
-.card:hover {
-  transform: translateY(-8px) scale(1.02);
-  border-color: gold;
+  border-radius: 10px;
 }
 
 .card img {
   width: 100%;
-  height: 180px;
-  object-fit: cover;
-}
-
-.card-body {
-  padding: 12px;
-}
-
-/* MODAL */
-.modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.85);
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-box {
-  width: 85%;
-  background: #111;
-  border-radius: 16px;
-  display: flex;
-  overflow: hidden;
-}
-
-.modal-left {
-  flex: 1;
-  background: black;
-}
-
-.modal-left img {
-  width: 100%;
-}
-
-.thumbs {
-  display: flex;
-  gap: 6px;
-  padding: 10px;
-}
-
-.thumbs img {
-  width: 60px;
-  cursor: pointer;
-  border-radius: 6px;
-  opacity: 0.6;
-}
-
-.thumbs img:hover {
-  opacity: 1;
-}
-
-.modal-right {
-  flex: 1;
-  padding: 20px;
-}
-
-.btn {
-  margin-top: 15px;
-  padding: 12px;
-  background: gold;
-  border: none;
-  cursor: pointer;
-  border-radius: 8px;
-}
-
-#close {
-  position: absolute;
-  right: 20px;
-  top: 20px;
-  cursor: pointer;
-  font-size: 22px;
 }

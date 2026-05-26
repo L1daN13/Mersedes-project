@@ -1,58 +1,37 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mercedes Luxury</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mercedes Luxury Showroom</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <header class="header">
-  <div class="logo">★ Mercedes Luxury</div>
-  <nav class="nav">
-    <a href="#home">Головна</a>
-    <a href="#cars">Авто</a>
-    <a href="#about">Про нас</a>
-    <a href="#contacts">Контакти</a>
-  </nav>
+  <h1>Mercedes Luxury</h1>
 </header>
 
-<section id="home" class="hero">
-  <h1>The Best or Nothing</h1>
-  <p>Преміальні автомобілі Mercedes-Benz</p>
-  <a href="#cars" class="btn">Переглянути авто</a>
+<section class="hero">
+  <h2>The Best or Nothing</h2>
+  <p>Оберіть свій Mercedes</p>
 </section>
 
-<section id="cars" class="section">
-  <h2>Наші автомобілі</h2>
+<section class="cars">
   <div id="carsGrid" class="grid"></div>
 </section>
 
-<section id="about" class="section">
-  <h2>Про нас</h2>
-  <p>Офіційний дилер Mercedes-Benz преміум класу.</p>
-</section>
-
-<section id="contacts" class="section">
-  <h2>Контакти</h2>
-  <form>
-    <input placeholder="Ім’я" />
-    <input placeholder="Телефон" />
-    <button type="submit">Надіслати</button>
-  </form>
-</section>
-
-<footer class="footer">
-  © 2025 Mercedes Luxury
-</footer>
+<!-- МОДАЛЬНЕ ВІКНО -->
+<div id="modal" class="modal">
+  <div class="modal-box">
+    <span id="closeBtn">✕</span>
+    <img id="modalImg">
+    <h2 id="modalTitle"></h2>
+    <p id="modalDesc"></p>
+  </div>
+</div>
 
 <script src="script.js"></script>
 </body>

@@ -4,56 +4,798 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Mercedes Luxury — Demo</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ── RESET & BASE ──────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:   #060607;
+      --dark:    #0c0c0e;
+      --panel:   #111114;
+      --card:    #16161a;
+      --border:  #252528;
+      --muted:   #5a5a62;
+      --silver:  #9a9aa8;
+      --light:   #dddde8;
+      --white:   #f0f0f6;
+      --gold:    #c9a84c;
+      --gold2:   #e8cc80;
+      --accent:  #3a7bd5;
+      --radius:  4px;
+      --ease:    cubic-bezier(.4,0,.2,1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--light);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      letter-spacing: .04em;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    button { font-family: inherit; cursor: pointer; }
+
+    /* ── SCROLLBAR ─────────────────────────────────── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--dark); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+    /* ── UTILITY ───────────────────────────────────── */
+    .container { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
+
+    .gold-line {
+      display: inline-block;
+      width: 40px; height: 1px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      vertical-align: middle;
+      margin-right: 12px;
+    }
+
+    /* ── HEADER ────────────────────────────────────── */
+    .site-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      padding: 0 32px;
+      height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: linear-gradient(180deg, rgba(6,6,7,.97) 0%, rgba(6,6,7,.8) 100%);
+      border-bottom: 1px solid rgba(201,168,76,.15);
+      backdrop-filter: blur(20px);
+      transition: background .4s;
+    }
+
+    .brand {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .brand-star {
+      width: 32px; height: 32px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; color: var(--gold);
+      letter-spacing: -1px;
+    }
+    .brand-text {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 500;
+      font-size: 13px;
+      letter-spacing: .3em;
+      color: var(--white);
+    }
+
+    .main-nav ul {
+      display: flex; gap: 4px;
+      list-style: none;
+    }
+    .main-nav a {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--silver);
+      padding: 8px 16px;
+      border-radius: var(--radius);
+      transition: color .25s, background .25s;
+      position: relative;
+    }
+    .main-nav a::after {
+      content: '';
+      position: absolute; bottom: 4px; left: 50%; right: 50%;
+      height: 1px; background: var(--gold);
+      transition: left .3s var(--ease), right .3s var(--ease);
+    }
+    .main-nav a:hover, .main-nav a[aria-current="page"] {
+      color: var(--white);
+    }
+    .main-nav a:hover::after, .main-nav a[aria-current="page"]::after {
+      left: 16px; right: 16px;
+    }
+
+    .header-actions { display: flex; align-items: center; gap: 12px; }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px; font-weight: 500;
+      letter-spacing: .18em; text-transform: uppercase;
+      padding: 10px 24px;
+      border-radius: var(--radius);
+      border: none; cursor: pointer;
+      transition: all .3s var(--ease);
+      white-space: nowrap;
+    }
+    .btn.primary {
+      background: var(--gold);
+      color: var(--black);
+    }
+    .btn.primary:hover {
+      background: var(--gold2);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(201,168,76,.3);
+    }
+    .btn.secondary {
+      background: transparent;
+      border: 1px solid rgba(201,168,76,.4);
+      color: var(--gold);
+    }
+    .btn.secondary:hover {
+      border-color: var(--gold);
+      background: rgba(201,168,76,.06);
+    }
+    .btn.ghost {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--silver);
+      padding: 10px 14px;
+    }
+    .btn.ghost:hover { border-color: var(--muted); color: var(--light); }
+
+    .nav-toggle { display: none; }
+
+    /* ── PAGE SYSTEM ───────────────────────────────── */
+    .page { display: none; padding-top: 72px; }
+    .page.active { display: block; }
+
+    /* ── HERO ──────────────────────────────────────── */
+    #home {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding-top: 0 !important;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 50%, rgba(58,123,213,.08) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 20% 60%, rgba(201,168,76,.06) 0%, transparent 55%),
+        linear-gradient(135deg, #060607 0%, #0c0c12 50%, #07070c 100%);
+    }
+
+    .hero-grid-lines {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(201,168,76,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,168,76,.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    .hero-car-silhouette {
+      position: absolute;
+      right: -5%;
+      bottom: 8%;
+      width: 65%;
+      height: 55%;
+      background:
+        radial-gradient(ellipse 100% 40% at 50% 80%, rgba(201,168,76,.07) 0%, transparent 60%),
+        url('https://picsum.photos/seed/amggts/1200/700') center/cover no-repeat;
+      mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.3) 20%, rgba(0,0,0,.85) 50%, rgba(0,0,0,.85) 80%, transparent 100%),
+                  linear-gradient(180deg, rgba(0,0,0,.8) 0%, rgba(0,0,0,.9) 70%, transparent 100%);
+      mask-composite: intersect;
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.3) 20%, rgba(0,0,0,.85) 50%, rgba(0,0,0,.85) 80%, transparent 100%),
+                          linear-gradient(180deg, rgba(0,0,0,.8) 0%, rgba(0,0,0,.9) 70%, transparent 100%);
+      -webkit-mask-composite: source-in;
+      opacity: .5;
+    }
+
+    .hero-content {
+      position: relative; z-index: 2;
+      padding: 120px 32px 80px;
+      max-width: 1240px; margin: 0 auto; width: 100%;
+    }
+
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 11px; font-weight: 500; letter-spacing: .35em; text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+      opacity: 0; animation: fadeUp .8s .2s var(--ease) forwards;
+    }
+    .hero-eyebrow-dot {
+      width: 4px; height: 4px;
+      border-radius: 50%; background: var(--gold);
+    }
+
+    #home h1 {
+      font-size: clamp(52px, 7vw, 96px);
+      font-weight: 300;
+      line-height: 1.0;
+      letter-spacing: -.01em;
+      color: var(--white);
+      margin-bottom: 24px;
+      opacity: 0; animation: fadeUp .9s .35s var(--ease) forwards;
+    }
+    #home h1 em {
+      font-style: italic; color: var(--gold);
+    }
+
+    .hero-subtitle {
+      font-size: 14px;
+      color: var(--silver);
+      letter-spacing: .08em;
+      max-width: 400px;
+      margin-bottom: 48px;
+      opacity: 0; animation: fadeUp .8s .5s var(--ease) forwards;
+    }
+
+    .hero-cta {
+      display: flex; gap: 16px; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp .8s .65s var(--ease) forwards;
+    }
+
+    .hero-stats {
+      position: absolute; bottom: 48px; right: 32px;
+      display: flex; gap: 48px;
+      opacity: 0; animation: fadeUp .8s .8s var(--ease) forwards;
+    }
+    .stat { text-align: right; }
+    .stat-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 42px; font-weight: 300;
+      color: var(--white); line-height: 1;
+    }
+    .stat-label {
+      font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--muted); margin-top: 4px;
+    }
+    .stat-gold { color: var(--gold); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── SECTION STYLES ────────────────────────────── */
+    .section-wrap {
+      padding: 100px 0;
+    }
+
+    .section-header {
+      margin-bottom: 64px;
+    }
+    .section-tag {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 10px; font-weight: 500; letter-spacing: .4em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 16px;
+    }
+    .section-tag::before {
+      content: '';
+      width: 32px; height: 1px; background: var(--gold);
+    }
+    .section-title {
+      font-size: clamp(36px, 4vw, 56px);
+      font-weight: 300; color: var(--white);
+      line-height: 1.1;
+    }
+    .section-title em { font-style: italic; color: var(--gold); }
+
+    /* ── FILTERS ───────────────────────────────────── */
+    .filters-bar {
+      display: flex; align-items: flex-end;
+      gap: 20px; flex-wrap: wrap;
+      padding: 24px 28px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-top: 2px solid rgba(201,168,76,.3);
+      border-radius: var(--radius);
+      margin-bottom: 48px;
+    }
+    .filter-group { flex: 1; min-width: 160px; display: flex; flex-direction: column; gap: 8px; }
+    .filter-group label {
+      font-size: 10px; font-weight: 500;
+      letter-spacing: .2em; text-transform: uppercase;
+      color: var(--muted);
+    }
+    .filter-group input,
+    .filter-group select {
+      background: var(--dark);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--light);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color .25s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .filter-group input:focus,
+    .filter-group select:focus {
+      border-color: rgba(201,168,76,.5);
+    }
+    .filter-actions { display: flex; gap: 10px; }
+
+    /* ── CARS GRID ─────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .card {
+      background: var(--card);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: background .3s;
+    }
+    .card:hover { background: #1c1c22; }
+
+    .card-thumb {
+      position: relative;
+      height: 220px;
+      overflow: hidden;
+    }
+    .card-thumb img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform .7s var(--ease), filter .5s;
+      filter: saturate(.85) brightness(.9);
+    }
+    .card:hover .card-thumb img {
+      transform: scale(1.06);
+      filter: saturate(1) brightness(1);
+    }
+    .card-thumb-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(6,6,7,.9) 100%);
+    }
+
+    .card-badge {
+      position: absolute; top: 16px; left: 16px;
+      font-size: 9px; font-weight: 600; letter-spacing: .25em; text-transform: uppercase;
+      padding: 4px 10px;
+      background: rgba(201,168,76,.15);
+      border: 1px solid rgba(201,168,76,.35);
+      color: var(--gold);
+      border-radius: 2px;
+      backdrop-filter: blur(8px);
+    }
+
+    .card-body { padding: 20px 24px 24px; }
+    .card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px; font-weight: 300; color: var(--white);
+      margin-bottom: 6px; line-height: 1.2;
+    }
+    .card-meta {
+      font-size: 11px; color: var(--muted);
+      letter-spacing: .08em; margin-bottom: 16px;
+    }
+    .card-price-row {
+      display: flex; justify-content: space-between; align-items: flex-end;
+    }
+    .card-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px; font-weight: 300;
+      color: var(--gold);
+    }
+    .card-cta {
+      font-size: 10px; font-weight: 500; letter-spacing: .2em;
+      text-transform: uppercase; color: var(--muted);
+      transition: color .25s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .card:hover .card-cta { color: var(--gold); }
+    .card-cta-arrow { transition: transform .25s; }
+    .card:hover .card-cta-arrow { transform: translateX(4px); }
+
+    .no-results {
+      grid-column: 1/-1;
+      padding: 64px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      letter-spacing: .15em;
+    }
+
+    /* ── ABOUT ─────────────────────────────────────── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .about-image-wrap {
+      position: relative;
+    }
+    .about-image-main {
+      width: 100%; aspect-ratio: 4/3;
+      object-fit: cover;
+      filter: saturate(.8);
+    }
+    .about-image-accent {
+      position: absolute;
+      width: 45%; aspect-ratio: 1;
+      object-fit: cover;
+      bottom: -24px; right: -24px;
+      border: 4px solid var(--black);
+      filter: saturate(.7);
+    }
+    .about-gold-bar {
+      position: absolute;
+      top: 0; left: -8px;
+      width: 2px; height: 100%;
+      background: linear-gradient(180deg, transparent 0%, var(--gold) 30%, var(--gold) 70%, transparent 100%);
+    }
+
+    .about-text .section-header { margin-bottom: 32px; }
+    .about-text p {
+      font-size: 14px; color: var(--silver); line-height: 1.9;
+      margin-bottom: 20px;
+    }
+    .about-features {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 20px; margin-top: 36px;
+    }
+    .about-feature {
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--panel);
+    }
+    .about-feature-icon {
+      font-size: 22px; margin-bottom: 10px;
+    }
+    .about-feature-title {
+      font-size: 12px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--white); margin-bottom: 4px;
+    }
+    .about-feature-text {
+      font-size: 12px; color: var(--muted); line-height: 1.6;
+    }
+
+    /* ── CONTACT ───────────────────────────────────── */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 80px;
+      align-items: start;
+    }
+    .contact-info h3 {
+      font-size: 32px; font-weight: 300; color: var(--white);
+      margin-bottom: 24px;
+    }
+    .contact-info p {
+      font-size: 13px; color: var(--silver); line-height: 1.9;
+      margin-bottom: 40px;
+    }
+    .contact-details { display: flex; flex-direction: column; gap: 16px; }
+    .contact-detail {
+      display: flex; align-items: center; gap: 14px;
+    }
+    .contact-detail-icon {
+      width: 40px; height: 40px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+    .contact-detail-text { font-size: 13px; color: var(--silver); }
+    .contact-detail-label {
+      font-size: 10px; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 2px;
+    }
+
+    .contact-form {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-top: 2px solid rgba(201,168,76,.3);
+      padding: 36px;
+      border-radius: var(--radius);
+    }
+    .form-row { margin-bottom: 20px; }
+    .form-row label {
+      display: block;
+      font-size: 10px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 8px;
+    }
+    .form-row input,
+    .form-row select,
+    .form-row textarea {
+      width: 100%;
+      background: var(--dark);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--light);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      padding: 12px 16px;
+      outline: none;
+      transition: border-color .25s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .form-row input:focus,
+    .form-row select:focus { border-color: rgba(201,168,76,.5); }
+    .error {
+      display: block;
+      font-size: 11px; color: #e06060;
+      margin-top: 6px; min-height: 16px;
+    }
+    #formStatus {
+      font-size: 12px; letter-spacing: .1em;
+      color: var(--gold); margin-top: 12px;
+      min-height: 20px;
+    }
+
+    /* ── FOOTER ────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 48px 0;
+      text-align: center;
+    }
+    footer p {
+      font-size: 11px; letter-spacing: .15em;
+      color: var(--muted);
+    }
+    footer .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px; color: var(--gold);
+      margin-bottom: 16px;
+      letter-spacing: .2em;
+    }
+
+    /* ── MODAL ─────────────────────────────────────── */
+    .modal {
+      position: fixed; inset: 0; z-index: 500;
+      display: flex; align-items: center; justify-content: center;
+      padding: 32px;
+      background: rgba(0,0,0,.85);
+      backdrop-filter: blur(12px);
+      opacity: 0; visibility: hidden;
+      transition: opacity .3s var(--ease), visibility .3s;
+    }
+    .modal.show { opacity: 1; visibility: visible; }
+    .modal.show .modal-box { transform: translateY(0); opacity: 1; }
+
+    .modal-backdrop { position: absolute; inset: 0; }
+
+    .modal-box {
+      position: relative; z-index: 1;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-top: 2px solid rgba(201,168,76,.4);
+      border-radius: var(--radius);
+      max-width: 960px; width: 100%;
+      max-height: 90vh; overflow-y: auto;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: transform .4s var(--ease), opacity .4s var(--ease);
+    }
+
+    .modal-media {
+      position: relative;
+    }
+    #modalImage {
+      width: 100%; height: 340px; object-fit: cover;
+    }
+    .thumbs {
+      display: flex; gap: 6px; padding: 12px;
+      background: var(--dark);
+    }
+    .thumbs img {
+      width: 72px; height: 48px;
+      object-fit: cover;
+      cursor: pointer;
+      opacity: .6;
+      border: 1px solid transparent;
+      transition: opacity .2s, border-color .2s;
+    }
+    .thumbs img:hover, .thumbs img.active { opacity: 1; border-color: var(--gold); }
+
+    .modal-content { padding: 36px; display: flex; flex-direction: column; }
+    .modal-tag {
+      font-size: 10px; font-weight: 500; letter-spacing: .3em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 12px;
+    }
+    #modalTitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 30px; font-weight: 300; color: var(--white);
+      line-height: 1.2; margin-bottom: 8px;
+    }
+    .modal-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px; font-weight: 300;
+      color: var(--gold); margin-bottom: 16px;
+    }
+    .modal-desc {
+      font-size: 13px; color: var(--silver); line-height: 1.8;
+      margin-bottom: 24px;
+    }
+    .modal-specs {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 8px;
+      margin-bottom: 32px;
+    }
+    .modal-specs li {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 12px; color: var(--silver);
+    }
+    .modal-specs li::before {
+      content: '';
+      width: 16px; height: 1px;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+    .modal-actions { display: flex; gap: 12px; margin-top: auto; }
+
+    .modal-close {
+      position: absolute; top: 14px; right: 14px;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: rgba(0,0,0,.5);
+      border: 1px solid var(--border);
+      color: var(--silver);
+      font-size: 14px;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 2;
+      transition: color .2s, border-color .2s;
+    }
+    .modal-close:hover { color: var(--white); border-color: var(--muted); }
+
+    /* ── MOBILE ────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .container { padding: 0 20px; }
+      .site-header { padding: 0 20px; }
+      .hero-content { padding: 120px 20px 80px; }
+
+      .main-nav {
+        position: fixed; top: 72px; left: 0; right: 0;
+        background: rgba(6,6,7,.97);
+        border-bottom: 1px solid var(--border);
+        transform: translateY(-100%);
+        transition: transform .3s var(--ease);
+        padding: 20px;
+        backdrop-filter: blur(20px);
+        z-index: 100;
+      }
+      .main-nav.open { transform: translateY(0); }
+      .main-nav ul { flex-direction: column; gap: 0; }
+      .main-nav a { display: block; padding: 14px 8px; }
+      .main-nav a::after { display: none; }
+
+      .nav-toggle {
+        display: flex; align-items: center; justify-content: center;
+        background: transparent; border: 1px solid var(--border);
+        color: var(--silver); width: 36px; height: 36px;
+        border-radius: var(--radius); font-size: 16px;
+      }
+
+      .hero-stats { position: static; flex-direction: row; flex-wrap: wrap; gap: 24px; margin-top: 40px; }
+      .stat { text-align: left; }
+
+      .hero-car-silhouette { opacity: .2; width: 90%; right: -20%; }
+
+      .grid { grid-template-columns: 1fr; }
+      .filters-bar { flex-direction: column; }
+      .filter-group { min-width: unset; width: 100%; }
+
+      .about-grid { grid-template-columns: 1fr; gap: 48px; }
+      .about-image-accent { display: none; }
+
+      .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+
+      .modal-box { grid-template-columns: 1fr; }
+      #modalImage { height: 220px; }
+    }
+  </style>
 </head>
-<body class="theme-auto">
+<body>
+
+  <!-- HEADER -->
   <header class="site-header">
-    <div class="container nav-wrap">
-      <a class="brand" href="#home" aria-label="Mercedes Luxury — на Головну">
-        <span class="brand-text">MERCEDES LUXURY</span>
-      </a>
-      <nav class="main-nav" aria-label="Головна навігація">
-        <button class="nav-toggle" aria-expanded="false" aria-controls="nav-list" aria-label="Меню">☰</button>
-        <ul id="nav-list">
-          <li><a href="#home" data-nav>Головна</a></li>
-          <li><a href="#cars" data-nav>Авто</a></li>
-          <li><a href="#about" data-nav>Про нас</a></li>
-          <li><a href="#contacts" data-nav>Контакти</a></li>
-        </ul>
-      </nav>
-      <div class="header-actions">
-        <button id="themeToggle" class="btn ghost" aria-label="Перемикання теми">🌓</button>
-        <a class="btn primary" href="#contacts">Запис</a>
-      </div>
+    <a class="brand" href="#home" aria-label="Mercedes Luxury — Головна">
+      <div class="brand-star">★</div>
+      <span class="brand-text">Mercedes Luxury</span>
+    </a>
+    <nav class="main-nav" aria-label="Навігація">
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-list" aria-label="Меню">☰</button>
+      <ul id="nav-list">
+        <li><a href="#home" data-nav>Головна</a></li>
+        <li><a href="#cars" data-nav>Автомобілі</a></li>
+        <li><a href="#about" data-nav>Про нас</a></li>
+        <li><a href="#contacts" data-nav>Контакти</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <button id="themeToggle" class="btn ghost" aria-label="Тема" style="display:none">🌓</button>
+      <a class="btn primary" href="#contacts">Записатись</a>
     </div>
   </header>
 
   <main>
-    <section id="home" class="page hero active">
-      <div class="container hero-content">
-        <h1>The Best or Nothing</h1>
-        <p class="subtitle">Преміальні автомобілі нового покоління</p>
+
+    <!-- HERO -->
+    <section id="home" class="page active">
+      <div class="hero-bg"></div>
+      <div class="hero-grid-lines"></div>
+      <div class="hero-car-silhouette"></div>
+      <div class="hero-content">
+        <div class="hero-eyebrow">
+          <span class="hero-eyebrow-dot"></span>
+          Преміальний дилер · Київ, Україна
+        </div>
+        <h1>The Best<br>or <em>Nothing.</em></h1>
+        <p class="hero-subtitle">Преміальні автомобілі Mercedes-Benz нового покоління — тест-драйв, трейд-ін, сервіс.</p>
         <div class="hero-cta">
-          <a href="#cars" class="btn primary">Каталог</a>
-          <a href="#about" class="btn secondary">Про нас</a>
+          <a href="#cars" class="btn primary" data-nav>Каталог авто</a>
+          <a href="#about" class="btn secondary" data-nav>Дізнатись більше</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat">
+            <div class="stat-number stat-gold">24+</div>
+            <div class="stat-label">Моделі в наявності</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">12</div>
+            <div class="stat-label">Років досвіду</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">1 800</div>
+            <div class="stat-label">Задоволених клієнтів</div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section id="cars" class="page section">
+    <!-- CARS -->
+    <section id="cars" class="page section-wrap">
       <div class="container">
-        <h2>Каталог</h2>
-        <div class="filters">
+        <div class="section-header">
+          <div class="section-tag">Колекція</div>
+          <h2 class="section-title">Наші <em>автомобілі</em></h2>
+        </div>
+
+        <div class="filters-bar">
           <div class="filter-group">
-            <label for="search">Пошук</label>
-            <input type="search" id="search" placeholder="AMG" />
+            <label for="search">Пошук моделі</label>
+            <input type="search" id="search" placeholder="AMG, S-Class…" />
           </div>
           <div class="filter-group">
             <label for="price">Ціна до (USD)</label>
-            <input type="number" id="price" placeholder="220000" />
+            <input type="number" id="price" placeholder="250 000" />
           </div>
           <div class="filter-group">
-            <label for="type">Тип</label>
+            <label for="type">Категорія</label>
             <select id="type">
               <option value="">Всі</option>
               <option value="sedan">Седан</option>
@@ -63,49 +805,127 @@
             </select>
           </div>
           <div class="filter-actions">
-            <button id="applyFilters" class="btn secondary">Застосувати</button>
+            <button id="applyFilters" class="btn primary">Застосувати</button>
             <button id="resetFilters" class="btn ghost">Скинути</button>
           </div>
         </div>
+
         <div id="carsGrid" class="grid"></div>
       </div>
     </section>
 
-    <section id="about" class="page section">
+    <!-- ABOUT -->
+    <section id="about" class="page section-wrap">
       <div class="container">
-        <h2>Про нас</h2>
-        <p>Преміальний дилер Mercedes-Benz. Тест-драйв, трейд-ін, сервіс.</p>
+        <div class="about-grid">
+          <div class="about-image-wrap">
+            <div class="about-gold-bar"></div>
+            <img class="about-image-main" src="https://picsum.photos/seed/showroom1/800/600" alt="Шоурум" />
+            <img class="about-image-accent" src="https://picsum.photos/seed/mblogo/400/400" alt="Деталь" />
+          </div>
+          <div class="about-text">
+            <div class="section-header">
+              <div class="section-tag">Наша місія</div>
+              <h2 class="section-title">Про <em>нас</em></h2>
+            </div>
+            <p>Ми — офіційний преміальний дилер Mercedes-Benz з 2012 року. Пропонуємо повний спектр послуг: від вибору автомобіля до фінансування та постпродажного сервісу.</p>
+            <p>Кожен клієнт отримує персонального менеджера, прозорий підбір та гарантію якості від виробника.</p>
+            <div class="about-features">
+              <div class="about-feature">
+                <div class="about-feature-icon">🏎</div>
+                <div class="about-feature-title">Тест-драйв</div>
+                <div class="about-feature-text">Безкоштовний тест-драйв будь-якої моделі в зручний для вас час.</div>
+              </div>
+              <div class="about-feature">
+                <div class="about-feature-icon">🔄</div>
+                <div class="about-feature-title">Трейд-ін</div>
+                <div class="about-feature-text">Обміняйте ваше авто — оцінимо та зарахуємо в рахунок нового.</div>
+              </div>
+              <div class="about-feature">
+                <div class="about-feature-icon">🛡</div>
+                <div class="about-feature-title">Офіційний сервіс</div>
+                <div class="about-feature-text">Сертифіковані механіки та оригінальні запчастини Mercedes-Benz.</div>
+              </div>
+              <div class="about-feature">
+                <div class="about-feature-icon">💼</div>
+                <div class="about-feature-title">Фінансування</div>
+                <div class="about-feature-text">Партнерство з 8 банками. Кредит або лізинг на вигідних умовах.</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section id="contacts" class="page section">
+    <!-- CONTACTS -->
+    <section id="contacts" class="page section-wrap">
       <div class="container">
-        <h2>Контакти</h2>
-        <form id="contactForm" novalidate>
-          <div class="form-row">
-            <label for="name">Ім’я</label>
-            <input id="name" name="name" type="text" required />
-            <span class="error" data-for="name"></span>
+        <div class="contact-grid">
+          <div class="contact-info">
+            <div class="section-tag">Зв'язок</div>
+            <h3>Запишіться на<br><em style="font-style:italic;color:var(--gold)">консультацію</em></h3>
+            <p>Залиште заявку — наш менеджер зв'яжеться з вами протягом 30 хвилин у робочий час і відповість на всі запитання.</p>
+            <div class="contact-details">
+              <div class="contact-detail">
+                <div class="contact-detail-icon">📍</div>
+                <div>
+                  <div class="contact-detail-label">Адреса</div>
+                  <div class="contact-detail-text">вул. Хрещатик 1, Київ</div>
+                </div>
+              </div>
+              <div class="contact-detail">
+                <div class="contact-detail-icon">📞</div>
+                <div>
+                  <div class="contact-detail-label">Телефон</div>
+                  <div class="contact-detail-text">+38 (044) 000-00-00</div>
+                </div>
+              </div>
+              <div class="contact-detail">
+                <div class="contact-detail-icon">🕐</div>
+                <div>
+                  <div class="contact-detail-label">Години роботи</div>
+                  <div class="contact-detail-text">Пн–Пт 9:00–20:00 · Сб–Нд 10:00–18:00</div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="form-row">
-            <label for="phone">Телефон</label>
-            <input id="phone" name="phone" type="tel" required />
-            <span class="error" data-for="phone"></span>
+
+          <div class="contact-form">
+            <form id="contactForm" novalidate>
+              <div class="form-row">
+                <label for="name">Ваше ім'я</label>
+                <input id="name" name="name" type="text" placeholder="Іван Петренко" required />
+                <span class="error" data-for="name"></span>
+              </div>
+              <div class="form-row">
+                <label for="phone">Телефон</label>
+                <input id="phone" name="phone" type="tel" placeholder="+38 (0__) ___-__-__" required />
+                <span class="error" data-for="phone"></span>
+              </div>
+              <div class="form-row">
+                <label for="model">Модель</label>
+                <select id="model" name="model"><option value="">Не обрано</option></select>
+              </div>
+              <div class="form-row">
+                <button class="btn primary" type="submit" style="width:100%;padding:14px">Надіслати заявку</button>
+                <div id="formStatus" role="status" aria-live="polite"></div>
+              </div>
+            </form>
           </div>
-          <div class="form-row">
-            <label for="model">Модель</label>
-            <select id="model" name="model"><option value="">Не обрано</option></select>
-          </div>
-          <div class="form-actions">
-            <button class="btn primary" type="submit">Надіслати</button>
-            <div id="formStatus" role="status" aria-live="polite"></div>
-          </div>
-        </form>
+        </div>
       </div>
     </section>
   </main>
 
-  <!-- Модалка -->
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-logo">Mercedes Luxury</div>
+      <p>© 2025 Mercedes Luxury — Офіційний преміальний дилер · Київ, Україна</p>
+    </div>
+  </footer>
+
+  <!-- MODAL -->
   <div id="modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
     <div class="modal-backdrop" data-close></div>
     <div class="modal-box" role="document">
@@ -115,6 +935,7 @@
         <div class="thumbs" id="modalThumbs"></div>
       </div>
       <div class="modal-content">
+        <div class="modal-tag">Mercedes-Benz</div>
         <h3 id="modalTitle"></h3>
         <p class="modal-price" id="modalPrice"></p>
         <p class="modal-desc" id="modalDesc"></p>
@@ -127,6 +948,279 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    const $ = (s, r = document) => r.querySelector(s);
+    const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+    const fmtUSD = n => new Intl.NumberFormat('uk-UA', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(n);
+
+    const TYPE_LABELS = { sedan: 'Седан', suv: 'Позашляховик', sport: 'Спорткар', electric: 'Електро' };
+
+    const CARS = [
+      {
+        id: 'amg-gt', title: 'Mercedes-AMG GT 63 S', type: 'sport', price: 185000,
+        power: 'V8 Biturbo 630 к.с.', accel: '0–100 км/г за 3.2 с', drive: 'RWD',
+        desc: 'Квінтесенція AMG — хардкорний спорткар із 630-сильним бітурбо V8, задньопривідним шасі та гоночним ДНК. Звук двигуна — окрема пристрасть.',
+        images: [
+          'https://picsum.photos/seed/amggt63/900/600',
+          'https://picsum.photos/seed/amggt63int/900/600',
+          'https://picsum.photos/seed/amggt63side/900/600'
+        ]
+      },
+      {
+        id: 's-class', title: 'Mercedes-Benz S-Class', type: 'sedan', price: 142000,
+        power: 'I6 Mild-Hybrid 367 к.с.', accel: '0–100 км/г за 4.9 с', drive: '4MATIC',
+        desc: 'Еталон автомобільної розкоші. S-Класу знову вдалося перевстановити планку комфорту, технологій та елегантності.',
+        images: [
+          'https://picsum.photos/seed/sclass2024/900/600',
+          'https://picsum.photos/seed/sclassint/900/600',
+          'https://picsum.photos/seed/sclassnight/900/600'
+        ]
+      },
+      {
+        id: 'g-class', title: 'Mercedes-Benz G 63 AMG', type: 'suv', price: 220000,
+        power: 'V8 Biturbo 585 к.с.', accel: '0–100 км/г за 4.5 с', drive: '4MATIC',
+        desc: 'Легенда, яка стала іконою. G-Клас поєднує нескорений офроуд-характер із найрозкішнішим інтер'єром у своїй категорії.',
+        images: [
+          'https://picsum.photos/seed/gclass63/900/600',
+          'https://picsum.photos/seed/gclassint/900/600',
+          'https://picsum.photos/seed/gclassoff/900/600'
+        ]
+      },
+      {
+        id: 'eqs', title: 'Mercedes-Benz EQS 580', type: 'electric', price: 138000,
+        power: 'Dual Motor 523 к.с.', accel: '0–100 км/г за 4.3 с', drive: 'AWD',
+        desc: 'Майбутнє розкоші — повністю електричний S-Клас із запасом ходу 770 км та неймовірним Hyperscreen інтер'єром.',
+        images: [
+          'https://picsum.photos/seed/eqs580/900/600',
+          'https://picsum.photos/seed/eqsint/900/600',
+          'https://picsum.photos/seed/eqsnight/900/600'
+        ]
+      },
+      {
+        id: 'gle-coupe', title: 'Mercedes-AMG GLE 53 Coupé', type: 'suv', price: 98000,
+        power: 'I6 EQ Boost 435 к.с.', accel: '0–100 км/г за 5.3 с', drive: '4MATIC+',
+        desc: 'Спортивний позашляховик-купе з динамічним характером AMG та просторим сімейним інтер'єром.',
+        images: [
+          'https://picsum.photos/seed/glecoupe/900/600',
+          'https://picsum.photos/seed/glegcint/900/600',
+          'https://picsum.photos/seed/glegcside/900/600'
+        ]
+      },
+      {
+        id: 'c63-amg', title: 'Mercedes-AMG C 63 S E', type: 'sport', price: 112000,
+        power: '2.0T + E-Motor 680 к.с.', accel: '0–100 км/г за 3.4 с', drive: 'AWD',
+        desc: 'Новий C 63 AMG — гібридна революція. 680 к.с., миттєвий крутний момент електромотора та чотириколісний привід.',
+        images: [
+          'https://picsum.photos/seed/c63amg/900/600',
+          'https://picsum.photos/seed/c63int/900/600',
+          'https://picsum.photos/seed/c63side/900/600'
+        ]
+      }
+    ];
+
+    const state = { filters: { q: '', maxPrice: '', type: '' } };
+
+    /* ── NAVIGATION ──────────────────────────────── */
+    function setActivePage(id) {
+      $$('.page').forEach(s => s.classList.toggle('active', s.id === id));
+      $$('a[data-nav]').forEach(a => {
+        const t = (a.getAttribute('href') || '').replace('#', '');
+        a.setAttribute('aria-current', t === id ? 'page' : '');
+      });
+      $('.main-nav')?.classList.remove('open');
+      $('.nav-toggle')?.setAttribute('aria-expanded', 'false');
+    }
+    function handleHashChange() {
+      const id = location.hash.replace('#', '') || 'home';
+      setActivePage($('#' + id) ? id : 'home');
+    }
+    function initNav() {
+      $$('a[data-nav]').forEach(a => {
+        a.addEventListener('click', e => {
+          const href = a.getAttribute('href');
+          if (!href?.startsWith('#')) return;
+          e.preventDefault();
+          history.pushState(null, '', href);
+          handleHashChange();
+          $('#' + href.slice(1))?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+      $('.nav-toggle')?.addEventListener('click', () => {
+        const nav = $('.main-nav');
+        const open = !nav.classList.contains('open');
+        nav.classList.toggle('open', open);
+        $('.nav-toggle').setAttribute('aria-expanded', String(open));
+      });
+      window.addEventListener('hashchange', handleHashChange);
+      handleHashChange();
+    }
+
+    /* ── CARDS ───────────────────────────────────── */
+    function createCarCard(car) {
+      const el = document.createElement('article');
+      el.className = 'card'; el.tabIndex = 0;
+      el.innerHTML = `
+        <div class="card-thumb">
+          <img src="${car.images[0]}" alt="${car.title}" loading="lazy" />
+          <div class="card-thumb-overlay"></div>
+          <div class="card-badge">${TYPE_LABELS[car.type] || car.type}</div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">${car.title}</h3>
+          <div class="card-meta">${car.drive} · ${car.power}</div>
+          <div class="card-price-row">
+            <div class="card-price">${fmtUSD(car.price)}</div>
+            <div class="card-cta">Детальніше <span class="card-cta-arrow">→</span></div>
+          </div>
+        </div>`;
+      const open = () => openModal(car.id);
+      el.addEventListener('click', open);
+      el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+      return el;
+    }
+
+    function applyFilters() {
+      const q = (state.filters.q || '').toLowerCase();
+      const max = Number(state.filters.maxPrice) || Infinity;
+      const t = state.filters.type || '';
+      return CARS.filter(c => {
+        const matchesQ = [c.title, c.desc, c.power, c.drive].join(' ').toLowerCase().includes(q);
+        const matchesP = c.price <= max;
+        const matchesT = !t || c.type === t;
+        return matchesQ && matchesP && matchesT;
+      });
+    }
+
+    function renderCars() {
+      const grid = $('#carsGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      const list = applyFilters();
+      if (!list.length) {
+        grid.innerHTML = '<p class="no-results">Нічого не знайдено. Спробуйте змінити фільтри.</p>';
+        return;
+      }
+      list.forEach(c => grid.appendChild(createCarCard(c)));
+    }
+
+    function initFilters() {
+      const search = $('#search'), price = $('#price'), type = $('#type');
+      $('#applyFilters')?.addEventListener('click', () => {
+        state.filters.q = search?.value || '';
+        state.filters.maxPrice = price?.value || '';
+        state.filters.type = type?.value || '';
+        renderCars();
+      });
+      $('#resetFilters')?.addEventListener('click', () => {
+        if (search) search.value = '';
+        if (price) price.value = '';
+        if (type) type.value = '';
+        state.filters = { q: '', maxPrice: '', type: '' };
+        renderCars();
+      });
+      const model = $('#model');
+      if (model) {
+        model.innerHTML = '<option value="">Не обрано</option>' + CARS.map(c => `<option value="${c.id}">${c.title}</option>`).join('');
+      }
+      renderCars();
+    }
+
+    /* ── MODAL ───────────────────────────────────── */
+    const modal = $('#modal');
+    function openModal(id) {
+      const car = CARS.find(c => c.id === id);
+      if (!car) return;
+      $('#modalTitle').textContent = car.title;
+      $('#modalPrice').textContent = fmtUSD(car.price);
+      $('#modalDesc').textContent = car.desc;
+      $('#modalSpecs').innerHTML = `<li>${car.power}</li><li>${car.drive}</li><li>${car.accel}</li>`;
+      const mainImg = $('#modalImage');
+      mainImg.src = car.images[0];
+      const thumbs = $('#modalThumbs');
+      thumbs.innerHTML = '';
+      car.images.forEach((src, i) => {
+        const im = new Image();
+        im.src = src; im.alt = `${car.title} ${i + 1}`;
+        if (i === 0) im.classList.add('active');
+        im.onclick = () => {
+          mainImg.src = src;
+          thumbs.querySelectorAll('img').forEach(t => t.classList.remove('active'));
+          im.classList.add('active');
+        };
+        thumbs.appendChild(im);
+      });
+      modal.classList.add('show');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+
+      $('#buyBtn').onclick = () => {
+        const sel = $('#model');
+        if (sel) sel.value = car.id;
+        closeModal();
+        history.pushState(null, '', '#contacts');
+        handleHashChange();
+      };
+      $('#testDriveBtn').onclick = () => {
+        closeModal();
+        history.pushState(null, '', '#contacts');
+        handleHashChange();
+      };
+    }
+    function closeModal() {
+      modal.classList.remove('show');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+    function initModal() {
+      modal.addEventListener('click', e => {
+        if (e.target.closest('[data-close]') || e.target === modal) closeModal();
+      });
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && modal.classList.contains('show')) closeModal();
+      });
+    }
+
+    /* ── FORM ────────────────────────────────────── */
+    function validateForm(d) {
+      const e = {};
+      if (!d.name || d.name.trim().length < 2) e.name = 'Вкажіть ім'я (мін. 2 символи).';
+      const phone = (d.phone || '').replace(/\D/g, '');
+      if (phone.length < 10) e.phone = 'Вкажіть коректний телефон.';
+      return e;
+    }
+    function initContactForm() {
+      const f = $('#contactForm');
+      if (!f) return;
+      f.addEventListener('submit', ev => {
+        ev.preventDefault();
+        const fd = new FormData(f);
+        const d = Object.fromEntries(fd.entries());
+        $$('.error', f).forEach(s => s.textContent = '');
+        const errs = validateForm(d);
+        Object.entries(errs).forEach(([k, msg]) => {
+          const s = $(`.error[data-for="${k}"]`, f);
+          if (s) s.textContent = msg;
+        });
+        if (Object.keys(errs).length) return;
+        const status = $('#formStatus');
+        status.textContent = '✓ Дякуємо! Зв'яжемося з вами найближчим часом.';
+        f.reset();
+        setTimeout(() => { status.textContent = ''; }, 5000);
+      });
+    }
+
+    /* ── INIT ────────────────────────────────────── */
+    function initApp() {
+      try { initNav(); } catch (e) { console.error(e); }
+      try { initFilters(); } catch (e) { console.error(e); }
+      try { initModal(); } catch (e) { console.error(e); }
+      try { initContactForm(); } catch (e) { console.error(e); }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initApp);
+    } else {
+      initApp();
+    }
+  </script>
 </body>
 </html>

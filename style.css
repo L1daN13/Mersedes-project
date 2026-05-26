@@ -1,29 +1,68 @@
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0e0e0e;
+  font-family: Montserrat, sans-serif;
+  background: #0b0b0b;
   color: white;
 }
 
-header {
+.header {
   display: flex;
   justify-content: space-between;
   padding: 20px;
   background: black;
+  position: sticky;
+  top: 0;
 }
 
-nav a {
+.nav a {
   color: white;
   margin: 0 10px;
   text-decoration: none;
 }
 
-section {
-  padding: 60px 20px;
+.hero {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle, #1a1a1a, #000);
+  text-align: center;
 }
 
-#carsGrid {
+.btn {
+  margin-top: 20px;
+  padding: 12px 20px;
+  background: gold;
+  color: black;
+  text-decoration: none;
+  border-radius: 8px;
+}
+
+.section {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 15px;
+}
+
+.car {
+  background: #1a1a1a;
+  padding: 15px;
+  border-radius: 12px;
+  transition: 0.3s;
+}
+
+.car:hover {
+  transform: scale(1.05);
+}
+
+.footer {
+  text-align: center;
+  padding: 20px;
+  background: black;
 }

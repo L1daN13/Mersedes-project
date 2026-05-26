@@ -1,1 +1,32 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Car</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+<a href="index.html">← Назад</a>
+
+<div id="car"></div>
+
+<a id="buyBtn" href="checkout.html">Купити</a>
+
+<script src="cars.js"></script>
+<script>
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+
+const car = cars.find(c => c.id === id);
+
+document.getElementById("car").innerHTML = `
+  <h1>${car.title}</h1>
+  <img src="${car.images[0]}">
+  <p>${car.desc}</p>
+  <h2>$${car.price}</h2>
+`;
+</script>
+
+</body>
+</html>

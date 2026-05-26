@@ -8,12 +8,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
+
   <!-- HEADER -->
   <header class="site-header">
     <a class="brand" href="#home" data-nav>
@@ -22,36 +23,82 @@
     </a>
 
     <nav class="main-nav">
-      <ul>
+      <ul id="nav-list">
         <li><a href="#home" data-nav>Головна</a></li>
         <li><a href="#cars" data-nav>Автомобілі</a></li>
         <li><a href="#about" data-nav>Про нас</a></li>
         <li><a href="#contacts" data-nav>Контакти</a></li>
       </ul>
     </nav>
+
+    <div class="header-actions">
+      <a class="btn primary" href="#contacts" data-nav>Записатись</a>
+    </div>
   </header>
 
-  <!-- HERO -->
-  <section id="home">
-    <h1>Mercedes Luxury</h1>
-    <p>Преміальні автомобілі Mercedes-Benz</p>
-  </section>
+  <main>
 
-  <!-- ABOUT IMAGE FIX -->
-  <section id="about">
-    <img src="https://picsum.photos/seed/showroom1/800/600" alt="Шоурум" />
-    <img src="https://picsum.photos/seed/mblogo/400/400" alt="Лого" />
-  </section>
+    <!-- HERO -->
+    <section id="home" class="page active">
+      <div class="hero-content">
+        <h1>The Best<br>or <em>Nothing.</em></h1>
+        <p>Преміальні автомобілі Mercedes-Benz</p>
 
-  <!-- CONTACT -->
-  <section id="contacts">
-    <h2>Контакти</h2>
-    <form>
-      <input placeholder="Ім'я" />
-      <input placeholder="Телефон" />
-      <button type="submit">Відправити</button>
-    </form>
-  </section>
+        <div class="hero-cta">
+          <a href="#cars" class="btn primary" data-nav>Каталог</a>
+          <a href="#about" class="btn secondary" data-nav>Про нас</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARS -->
+    <section id="cars" class="page section-wrap">
+      <div class="container">
+        <h2>Наші автомобілі</h2>
+        <div id="carsGrid" class="grid"></div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="page section-wrap">
+      <div class="container">
+        <h2>Про нас</h2>
+
+        <img src="https://picsum.photos/seed/showroom1/800/600" alt="Шоурум" />
+        <img src="https://picsum.photos/seed/mblogo/400/400" alt="Лого" />
+
+        <p>Ми — офіційний дилер Mercedes-Benz.</p>
+      </div>
+    </section>
+
+    <!-- CONTACTS -->
+    <section id="contacts" class="page section-wrap">
+      <div class="container">
+        <h2>Контакти</h2>
+
+        <form id="contactForm">
+          <input type="text" placeholder="Ім’я" />
+          <input type="tel" placeholder="Телефон" />
+          <button type="submit">Відправити</button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <button data-close>✕</button>
+      <img id="modalImage" />
+      <h3 id="modalTitle"></h3>
+      <p id="modalPrice"></p>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Mercedes Luxury</p>
+  </footer>
 
   <script src="script.js"></script>
 </body>
